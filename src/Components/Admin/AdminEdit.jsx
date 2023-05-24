@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-const initailState = {
+const initialState = {
   image: "",
   img1: "",
   img2: "",
@@ -26,39 +26,36 @@ const initailState = {
 };
 
 const AdminEdit = () => {
-  const [product, setProduct] = useState(initailState);
+  const [product, setProduct] = useState(initialState);
   const { id } = useParams();
   const toast = useToast();
 
-  const handleChange = (e) => {
-    let { value } = e.target;
-    setProduct((prev) => {
-      return { ...prev, [e.target.name]: value };
-    });
-  };
+const handleChange = (e) => {
+  let { value } = e.target;
+  setProduct((prev) => {
+    return { ...prev, [e.target.name]: value };
+  });
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .patch(
-        `https://lifestyle-mock-server-api.onrender.com/men/${id}`,
-        product
-      )
-      .then((res) => {
-        toast({
-          title: "Product Edited Success",
-          description: "We have edited our Product",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-          position: "top",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+const handleSubmit = (e) => {
+  e.preventDefault();
+  axios
+    .patch(`https://lifestyle-mock-server-api.onrender.com/men/${id}`, product)
+    .then((res) => {
+      toast({
+        title: "Product Edited Success",
+        description: "We have edited our Product",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
       });
-    setProduct(initailState);
-  };
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  setProduct(initialState);
+};
 
   useEffect(() => {
     axios
@@ -84,7 +81,9 @@ const AdminEdit = () => {
       gap={"20px"}
       bg={"#f7f8f7"}
     >
-      <FormLabel mt={"12px"}>Image</FormLabel>
+      <FormLabel mt={"12px"} for="image">
+        Image
+      </FormLabel>
       <Input
         type="text"
         value={product.image}
@@ -150,12 +149,13 @@ const AdminEdit = () => {
 
       <FormLabel mt={"12px"}>Gender</FormLabel>
       <Select
+        key="gender"
         name="gender"
         placeholder="Select Gender"
         onChange={(e) => handleChange(e)}
       >
-        <option value={"men"}>Men</option>
-        <option value={"women"}>Women</option>
+        <option value="men">Men</option>
+        <option value="women">Women</option>
       </Select>
 
       <FormLabel mt={"12px"} mb={"10px"}>
@@ -181,7 +181,13 @@ const AdminEdit = () => {
       </Select>
 
       {/* <Input type="submit"/> */}
-      <Button ml={"155px"} mt={"20px"} bg={"skyblue"} onClick={handleSubmit}>
+      <Button
+        ml={"155px"}
+        mt={"20px"}
+        bg={"skyblue"}
+        type="submit"
+        onClick={handleSubmit}
+      >
         Edit Product
       </Button>
     </FormControl>
